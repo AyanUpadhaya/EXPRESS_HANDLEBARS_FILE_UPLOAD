@@ -1,0 +1,109 @@
+<div class="container py-3">
+  <div class="row">
+    <h3>Register</h3>
+    <form id="registerForm">
+      <div class="mb-3">
+        <label for="fullName" class="form-label">Full name</label>
+        <input
+          type="text"
+          class="form-control"
+          id="fullName"
+          name="fullName"
+          aria-describedby="fullName"
+        />
+
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">Email address</label>
+        <input
+          type="email"
+          name="email"
+          class="form-control"
+          id="exampleInputEmail1"
+          aria-describedby="emailHelp"
+        />
+
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input
+          type="password"
+          name="password"
+          class="form-control"
+          id="password"
+        />
+      </div>
+      <br />
+      <div class="mb-3">
+        <p>
+          Already haven account <a href="/login">Login</a>
+        </p>
+      </div>
+      <button id="submitBtn" type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+
+<script>
+  const form = document.getElementById("registerForm");
+  const submitBtn = document.getElementById("submitBtn");
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault(); // Prevent default form submission
+
+    const formData = new FormData(form);
+
+     const formObj = {};
+
+    // Convert FormData to a plain object
+    formData.forEach((value, key) => {
+      formObj[key] = value;
+    });
+
+    try {
+      submitBtn.innerText = "Loading..."
+      submitBtn.disabled = true
+      const response = await fetch("/register", {
+        method: "POST",
+         headers: {
+          "Content-Type": "application/json", // Ensure we're sending JSON data
+        },
+        body: JSON.stringify(formObj),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        // Show success alert
+        Swal.fire({
+          title: "Registration Successful",
+          text: result.message || "You have been registered successfully!",
+          icon: "success",
+        }).then(() => {
+          // Redirect to login page
+          window.location.href = "/login";
+        });
+      } else {
+        // Show error alert
+        Swal.fire({
+          title: "Registration Failed",
+          text: result.message || "Something went wrong!",
+          icon: "error",
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        title: "Error",
+        text: "An unexpected error occurred!",
+        icon: "error",
+      });
+    }finally{
+      submitBtn.innerText = "Submit";
+      submitBtn.disabled = false;
+    }
+  });
+</script>
+ 
+
+
+</div>
+
