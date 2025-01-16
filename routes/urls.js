@@ -1,7 +1,5 @@
 const router = require("express").Router();
 const multiparty = require("multiparty");
-// const multer = require("multer");
-// const fileUpload = multer({ dest: "uploads/" });
 const {
   aboutView,
   homeView,
